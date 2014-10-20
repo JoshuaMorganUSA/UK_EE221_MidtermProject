@@ -1,11 +1,9 @@
 %Threshold Of Hearing characterization program
-%Used to determine number of sample points sufficient for use in filter
-%design
 
 %Created by: Joshua P. Morgan
 %10/2014
 
-%EE221 Experimental Desing Project
+%EE221 Midterm Project
 
 %Clear Workspace
 close all;
@@ -15,19 +13,9 @@ test_num_sample_points = 10;
 test_num_sample_trials = 1; 
 
 %*****TRIAL SETUP****************************
-%Enter end point frequencies (Hz)
-freq_lower = 1000;
-freq_upper = 10000;
-
-%Enter number of sample points for testing. The program will automatically
-%test in between adjacent points as well for use in determining
-%sufficiency of the sample number. IE (num_sample_points = 10 will actually
-%result in 10 + 9 sample poins. 10 for the original sample points and 9
-%points in between those 10.
-
-num_sample_points = 10;
-
-
+%Enter the sample frequencies
+%MUST CONTAIN 3500
+sample_freqs = [250, 500, 1000, 3500];
 %Enter number of trials for each data point. 
 num_sample_trials = 5;
 
@@ -43,13 +31,6 @@ cal_freq = 3500;        %(Hz)
 cal_dblevel = -4; 
 
 
-%*****ANALYSIS SETUP*************************
-%How far on either side is acceptable. Ex. entering 1 for db and std 
-%means within 1 db or within 1 std on EITHER side of the data point
-%for a total acceptance band of 2 db or 2 std
-
-tolerance_db = 1;
-tolerance_std = 1;
 
 
 
@@ -61,7 +42,7 @@ tolerance_std = 1;
 %AUDIO PLAYBACK CONFIGURATION
 audio_sample_freq = 44100;  % Sampling rate in Hz
 amp_max = .1;  % Amplitude of first tone
-dbstep = 1;  %  Decibles of sound attenuation between pulses
+dbstep = 2;  %  Decibles of sound attenuation between pulses
 int_tone = .2;  %  Tone duration in seconds
 int_silent = .2; %  Interval of silence between tones
 num = 30;  % number of tones
@@ -81,10 +62,7 @@ end
 
 
 
-
-%Create array of sample frequencies to use. 
-num_sample_freqs = num_sample_points * 2 - 1;
-sample_freqs = [logspace(log10(freq_lower), log10(freq_upper), num_sample_freqs), cal_freq];
+num_sample_freqs = length(sample_freqs);
 
 %Create array of all frequencies * num_sample_trials. Will be
 %num_sample_trials of each sample frequency
@@ -95,7 +73,7 @@ trial_freqs = [transpose(repmat(sample_freqs, 1, num_sample_trials))];
 %[Trial Data]       (1 x num_sample_trials)
 %mean               mean of trial data
 %std                standard deviation of trial data               
-trial_data = [num2cell(sample_freqs); cell(3, num_sample_freqs + 1)]; %Add one for cal freq
+trial_data = [num2cell(sample_freqs); cell(3, num_sample_freqs)];
 
 
 %Run all trials...
@@ -158,10 +136,6 @@ for i = 1:length(trial_data)
     
 
 end
-
-%disp(save_data)
-%Analyze Data
-trial_data = analyze_data(trial_data, cal_freq, cal_dblevel, dbstep, tolerance_db, tolerance_std);
 
 
 
