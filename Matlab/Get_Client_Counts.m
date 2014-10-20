@@ -15,7 +15,7 @@ test_num_sample_trials = 1;
 %*****TRIAL SETUP****************************
 %Enter the sample frequencies
 %MUST CONTAIN 3500
-sample_freqs = [250, 500, 1000, 3500];
+sample_freqs = [300, 500, 1000, 2000, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 13000, 15000];
 %Enter number of trials for each data point. 
 num_sample_trials = 5;
 

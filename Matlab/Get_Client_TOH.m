@@ -14,7 +14,7 @@ client_counts = xlsread(client_counts_file);
 
 %Create new array of TOH data
 client_TOH = client_counts(1, 1:2:end); %Get only freq row
-client_TOH = [client_TOH; mean(client_counts(2:end, 1:2:end))];
+client_TOH = [client_TOH; mean(client_counts(2:end, 1:2:end), 1)];
 
 
 %find index of cal frequency
@@ -25,16 +25,19 @@ client_TOH(2,:) = dbstep * (client_TOH(2, cal_index) - client_TOH(2,:)) + cal_db
 
 %Plot
 f1 = figure(1);
+semilogx(client_TOH(1,:), client_TOH(2,:), 'r*-', 'LineWidth', 2);
+grid
+
 title('Client TOH Curve')
 xlabel('Frequency (Hz)')
 ylabel('Threshold of Hearing (dB)')
-semilogx(client_TOH(1,:), client_TOH(2,:), 'r*-', 'LineWidth', 2);
-grid
+
 
 %Save Figure
 saveas(f1, 'client_TOH.jpg');
 
 %Save data
+delete('client_TOH.xls');
 xlswrite('client_TOH', client_TOH);
 
 

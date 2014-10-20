@@ -17,23 +17,19 @@ disp('Enter the dB level from the normal TOH curve for each frequency.');
 
 for i = 1:length(normal_TOH)
    
-    %Automatically enter the cal data so user can't mess it up
     if(normal_TOH(1, i) == cal_freq)
-        str_num = cal_dblevel;
-        
-    else
+        str_num = cal_d 
+    str = input(strcat(num2str(normal_TOH(1, i)), ': '),  's');
+    str_num = str2double(str);
+    
+    %Confirm user   1) Entered something
+    %               2) Entered a number
+    
+    while(isempty(str) || isnan(str_num))
+       
+        disp('You must enter a number');
         str = input(strcat(num2str(normal_TOH(1, i)), ': '),  's');
         str_num = str2double(str);
-
-        %Confirm user   1) Entered something
-        %               2) Entered a number
-
-        while(isempty(str) || isnan(str_num))
-
-            disp('You must enter a number');
-            str = input(strcat(num2str(normal_TOH(1, i)), ': '),  's');
-            str_num = str2double(str);
-        end
     end
     
     
