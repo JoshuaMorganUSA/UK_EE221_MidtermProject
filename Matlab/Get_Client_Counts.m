@@ -16,8 +16,6 @@ test_num_sample_trials = 1;
 %Enter the sample frequencies
 %MUST CONTAIN 3500
 sample_freqs = [250, 500, 1000, 3500];
-
-
 %Enter number of trials for each data point. 
 num_sample_trials = 5;
 
@@ -44,7 +42,7 @@ cal_dblevel = -4;
 %AUDIO PLAYBACK CONFIGURATION
 audio_sample_freq = 44100;  % Sampling rate in Hz
 amp_max = .1;  % Amplitude of first tone
-dbstep = 1;  %  Decibles of sound attenuation between pulses
+dbstep = 2;  %  Decibles of sound attenuation between pulses
 int_tone = .2;  %  Tone duration in seconds
 int_silent = .2; %  Interval of silence between tones
 num = 30;  % number of tones
@@ -64,7 +62,7 @@ end
 
 
 
-
+num_sample_freqs = length(sample_freqs);
 
 %Create array of all frequencies * num_sample_trials. Will be
 %num_sample_trials of each sample frequency
@@ -75,7 +73,7 @@ trial_freqs = [transpose(repmat(sample_freqs, 1, num_sample_trials))];
 %[Trial Data]       (1 x num_sample_trials)
 %mean               mean of trial data
 %std                standard deviation of trial data               
-trial_data = [num2cell(sample_freqs); cell(3, num_sample_freqs + 1)]; %Add one for cal freq
+trial_data = [num2cell(sample_freqs); cell(3, num_sample_freqs)];
 
 
 %Run all trials...
@@ -139,15 +137,11 @@ for i = 1:length(trial_data)
 
 end
 
-%disp(save_data)
-%Analyze Data
-trial_data = analyze_data(trial_data, cal_freq, cal_dblevel, dbstep, tolerance_db, tolerance_std);
-
 
 
 %Save raw data to Excel File
-delete('data.xls');     %Seems bad, but it works
-xlswrite('data', save_data);
+delete('client_counts.xls');     %Seems bad, but it works
+xlswrite('client_counts', save_data);
 
 
 
