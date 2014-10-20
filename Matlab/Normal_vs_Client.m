@@ -25,7 +25,7 @@ hold on
 %Plot Client
 semilogx(normal_vs_client(1,:), normal_vs_client(3,:), 'r*-', 'LineWidth', 2);
 %Plot difference
-semilogx(normal_vs_client(1,:), normal_vs_client(4,:), 'y*-', 'LineWidth', 2);
+semilogx(normal_vs_client(1,:), normal_vs_client(4,:), 'k*-', 'LineWidth', 2);
 grid
 title('Normal & Client TOH');
 xlabel('Frequency (Hz)');
