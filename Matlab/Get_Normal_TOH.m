@@ -55,7 +55,7 @@ ylabel('Threshold of Hearing (dB)')
 saveas(f1, 'normal_TOH.jpg');
 
 %Save data
-delete('normal_TOH');
+delete('normal_TOH.xls');
 xlswrite('normal_TOH', normal_TOH);
 
 

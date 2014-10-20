@@ -14,7 +14,7 @@ normal_TOH = xlsread(normal_file);
 normal_vs_client = [normal_TOH(1,:); normal_TOH(2,:); client_TOH(2,:)]
 
 %concatenate Differences
-normal_vs_client = [normal_vs_client; client_TOH(2,:) - normal_vs_client(2,:)];
+normal_vs_client = [normal_vs_cliclient_TOH(2,:) - normal_vs_client(2,:)];
 
 %plot data
 
@@ -37,6 +37,6 @@ legend('Normal TOH', 'Client TOH', 'Normal minus Client TOH', 'Location', 'north
 saveas(f1, 'normal-vs-client_TOH.jpg');
 
 %save data
-delete('normal-vs-client_TOH.xls')
+delete('normal-vs-client_TOH')
 xlswrite('normal-vs-client_TOH', normal_vs_client);
 
