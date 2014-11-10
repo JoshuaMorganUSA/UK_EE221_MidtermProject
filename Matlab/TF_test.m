@@ -2,7 +2,7 @@ tf = xlsread('tf_gain.xls');
 close all
 
 f0 = 14000;
-Q = f0/3000
+Q = f0/500
 dB = 12
 
 A = 10^(dB/20)
