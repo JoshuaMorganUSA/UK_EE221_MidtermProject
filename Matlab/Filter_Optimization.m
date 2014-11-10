@@ -40,9 +40,9 @@ G = [   [3.75,  7.5,    11.25];...
 
 %BW parameters (Hz)
 %min, guess, max
-BWf = [  [200,   400,    600];...
-        [500,   1000,   1500];...
-        [500,   1000,   1500];...
+BWf = [ [200,   400,    600];...
+        [300,   1000,   1500];...
+        [300,   1000,   1500];...
         [1000,  3000,   5000]];
     
        
@@ -98,7 +98,15 @@ tf_opt = bpf2tf(bpf_opt, s);
 %Convert to dB
 tf_opt_db = 20 * log10(abs(tf_opt));
 
-figure(1);
+
+
+%save bpf specs in xls file
+%wc (rad/s), 
+bpf_specs = [transpose(bpf_opt(1:3:end)), transpose(bpf_opt(2:3:end)), transpose(bpf_opt(3:3:end))];
+delete('opt_bpf_specs.xls');
+xlswrite('opt_bpf_specs', bpf_specs);
+%plot results
+f1 = figure(1);
 semilogx(tf_ideal(1,:), tf_ideal(2,:), 'b-', 'LineWidth', 2);
 hold on
 semilogx(f, tf_opt_db, 'r-', 'LineWidth', 2);
@@ -112,5 +120,7 @@ semilogx(end_bounds(1,:), end_bounds(2,:), 'm--', 'LineWidth', 1.5);
 %plot points on tf_opt_db line that correspond to end_bounds
 bound_points = [end_bounds(1,:); tf_opt_db(find(f <= end_bounds(1, 1), 1, 'last')), tf_opt_db(find(f >= end_bounds(1, 2), 1, 'first'))];
 semilogx(bound_points(1,:), bound_points(2,:), 'ro', 'LineWidth', 2, 'MarkerSize', 7);
+
+saveas(f1, 'Opt-BPF.jpg');
 
 
