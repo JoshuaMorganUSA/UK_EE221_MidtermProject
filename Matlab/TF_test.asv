@@ -21,9 +21,9 @@ f = [freq_min:1:freq_max];
 s = f * 2 * pi * i;
 B = w0/Q;
 B2 = w02/Q2;
-tstart = tic
+tic
 H = (A * s * B)./(w0^2 + s * B + s.^2);
-elapsed = toc(tstart)
+toc
 H2 = (A2 * s * B2)./(w02^2 + s * B2 + s.^2);
 
 figure(1);
