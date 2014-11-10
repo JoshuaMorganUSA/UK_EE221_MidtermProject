@@ -14,6 +14,9 @@ j = sqrt(-1);
 %These are the optimization parameters. Being greeedy here will make for
 %long run time.
 
+%End bounds (<3dB @ 50Hz, 20 kHz)
+end_bounds = [50, 20000; 3, 3];
+
 %All of these parameters are in Hz when appropriate
 freq_range_min = 50;
 freq_range_max = 20000;
@@ -54,12 +57,19 @@ A = 10.^(G/20);
 %BW converted to rad/s
 BWw = BWf * 2 * pi;
 
+x0 = [];
+lowerBound = [];
+upperBound = [];
+for i = 1:size(wc,1)
+   	lowerBound = [lowerBound, wc(i, 1), A(i, 1), BWw(i, 1)];
+    x0 = [x0, wc(i, 2), A(i, 2), BWw(i,2)];
+    upperBound = [upperBound, wc(i, 3), A(i, 3), BWw(i, 3)];
+
+end;
 
 
-
-
-%Build test freq array
-f = [freq_range_min:freq_range_step:freq_range_max];
+%Builds 'f' array
+f = freq_range_min : freq_range_step : freq_range_max;
 
 %Build 's' array. 
 s = f * 2 * pi * j; 
@@ -76,35 +86,31 @@ for(i = tf_ideal_raw(1,1):freq_range_step:tf_ideal_raw(1, end))
    
 end
 
+options = optimset('fmincon');
+options.MaxFunEvals = 10000;
+
+%Actually do optimization
+bpf_opt =  fmincon(@(x)tf_error(x,s,tf_ideal),x0,[],[],[],[],lowerBound, upperBound, [], options);
+
+%Get transfer function of optimized filter
+tf_opt = bpf2tf(bpf_opt, s);
+
+%Convert to dB
+tf_opt_db = 20 * log10(abs(tf_opt));
+
+figure(1);
+semilogx(tf_ideal(1,:), tf_ideal(2,:), 'b-', 'LineWidth', 2);
+hold on
+semilogx(f, tf_opt_db, 'r-', 'LineWidth', 2);
+grid;
+
+%plot bound lines. end points of transfer function must be below this
+%point. 
+semilogx(end_bounds(1,:), end_bounds(2,:), 'm--', 'LineWidth', 1.5);
 
 
-
-
-function f = myFunction
-
-end
-
-
-% %Build sample value arrays
-% %BPF1
-% bpf1_fc = bpf1_fc_min : bpf1_fc_step : bpf1_fc_max;
-% bpf1_A = bpf1_A_min : bpf1_A_step : bpf1_A_max;
-% bpf1_BW = bpf1_BW_min : bpf1_BW_step : bpf1_BW_max;
-% 
-% %BPF2
-% bpf2_fc = bpf2_fc_min : bpf2_fc_step : bpf2_fc_max;
-% bpf2_A = bpf2_A_min : bpf2_A_step : bpf2_A_max;
-% bpf2_BW = bpf2_BW_min : bpf2_BW_step : bpf2_BW_max;
-% 
-% %BPF3
-% bpf3_fc = bpf3_fc_min : bpf3_fc_step : bpf3_fc_max;
-% bpf3_A = bpf3_A_min : bpf3_A_step : bpf3_A_max;
-% bpf3_BW = bpf3_BW_min : bpf3_BW_step : bpf3_BW_max;
-% 
-% %BPF4
-% bpf4_fc = bpf4_fc_min : bpf4_fc_step : bpf4_fc_max;
-% bpf4_A = bpf4_A_min : bpf4_A_step : bpf4_A_max;
-% bpf4_BW = bpf4_BW_min : bpf4_BW_step : bpf4_BW_max;
-% 
+%plot points on tf_opt_db line that correspond to end_bounds
+bound_points = [end_bounds(1,:); tf_opt_db(find(f <= end_bounds(1, 1), 1, 'last')), tf_opt_db(find(f >= end_bounds(1, 2), 1, 'first'))];
+semilogx(bound_points(1,:), bound_points(2,:), 'ro', 'LineWidth', 2, 'MarkerSize', 7);
 
 
