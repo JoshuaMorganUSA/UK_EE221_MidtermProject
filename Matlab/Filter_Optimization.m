@@ -90,7 +90,7 @@ options = optimset('fmincon');
 options.MaxFunEvals = 10000;
 
 %Actually do optimization
-bpf_opt =  fmincon(@(x)tf_error(x,s,tf_ideal),x0,[],[],[],[],lowerBound, upperBound, [], options);
+bpf_opt =  fmincon(@(x)tf_error(x,s,tf_ideal, 0),x0,[],[],[],[],lowerBound, upperBound, [], options);
 
 %Get transfer function of optimized filter
 tf_opt = bpf2tf(bpf_opt, s);
@@ -120,7 +120,10 @@ semilogx(end_bounds(1,:), end_bounds(2,:), 'm--', 'LineWidth', 1.5);
 %plot points on tf_opt_db line that correspond to end_bounds
 bound_points = [end_bounds(1,:); tf_opt_db(find(f <= end_bounds(1, 1), 1, 'last')), tf_opt_db(find(f >= end_bounds(1, 2), 1, 'first'))];
 semilogx(bound_points(1,:), bound_points(2,:), 'ro', 'LineWidth', 2, 'MarkerSize', 7);
-
+legend('Target TF', 'Optimized TF', 'Out-Of-Band Spec', 'Location', 'southwest');
 saveas(f1, 'Opt-BPF.jpg');
+
+%print out errors
+tf_error(bpf_opt,s,tf_ideal, 1);
 
 
