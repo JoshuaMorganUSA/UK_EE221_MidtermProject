@@ -1,4 +1,4 @@
-%This script will 'brute-force' optimize the filter parameters for the
+%This script will optimize the filter parameters for the
 %active filter being constructed. The initial design utilizes 4 band-pass
 %filters to match the desired transfer function.
 
