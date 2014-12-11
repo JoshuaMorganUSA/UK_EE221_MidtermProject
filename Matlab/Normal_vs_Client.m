@@ -30,7 +30,7 @@ grid
 title('Normal & Client TOH');
 xlabel('Frequency (Hz)');
 ylabel('Threshold of Hearing (dB)');
-legend('Normal TOH', 'Client TOH', 'Normal minus Client TOH', 'Location', 'northwest');
+legend('Normal TOH', 'Client TOH', 'Client minus Normal TOH', 'Location', 'northwest');
 
 
 %save plot
